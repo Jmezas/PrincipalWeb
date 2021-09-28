@@ -1,0 +1,173 @@
+<!-- header start -->
+<header class="sticky" [ngClass]="class" [class.fixed]="stick && sticky">
+    <div class="mobile-fix-option"></div>
+    <div class="top-header" *ngIf="topbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="header-contact">
+                        <ul>
+                            <li>Bienvenido a nuestra tienda</li>
+                            <li><i class="fa fa-phone" aria-hidden="true"></i>llamar: 944224926</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <ul class="header-dropdown">
+                        <li class="compare">
+                            <a [routerLink]="['/shop/compare']"><i class="fa fa-random" aria-hidden="true"></i>Comparar</a>
+                        </li>
+                        <li class="mobile-wishlist">
+                            <a [routerLink]="['/shop/wishlist']"><i class="fa fa-heart" aria-hidden="true"></i>Lista de deseos</a>
+                        </li>
+                        <li class="onhover-dropdown mobile-account">
+                            <div *ngIf="auth.getUserInfo()">
+                                <i class="fa fa-user" aria-hidden="true"></i> {{ auth.getUserInfo()?.user?.nombre }}
+                            </div>
+                            <div *ngIf="!auth.getUserInfo()">
+                                <i class="fa fa-user" aria-hidden="true"></i> iniciar sesion
+                            </div>
+
+                            <ul class="onhover-show-div">
+                                <li>
+                                    <a data-lng="en" (click)="openCreate(content)" href="javascript:void(0)"> Login</a>
+                                </li>
+                                <li>
+                                    <a data-lng="es" href="javascript:void(0)" (click)="cerrarSesion()">  Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="main-menu border-section border-top-0">
+                    <div class="menu-left">
+                        <app-left-menu></app-left-menu>
+                    </div>
+                    <div class="brand-logo layout2-logo headerlogo">
+                        <a [routerLink]="['/home/fashion']">
+                            <img [src]="themeLogo" class="img-fluid" alt="logo">
+                        </a>
+                    </div>
+                    <div class="menu-right pull-right">
+                        <app-settings></app-settings>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row ">
+            <div class="col-lg-12">
+                <div class="main-nav-center">
+                    <app-menu></app-menu>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <ngb-tabset class="tab-coupon mb-0">
+            <ngb-tab>
+                <ng-template ngbTabTitle><i class="icon-user mr-2"></i>Login</ng-template>
+                <ng-template ngbTabContent>
+                    <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
+                        <form class="form-horizontal auth-form" [formGroup]="loginForm">
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="usuario" formControlName="email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Password" formControlName="password">
+                            </div>
+                            <div class="form-button">
+                                <button class="btn btn-primary" type="button" (click)="login()">Ingresar</button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+                <ng-template ngbTabTitle><i class="icon-unlock mr-2"></i> registrarse
+                    <ng-template ngbTabContent>
+                        <form class="needs-validation" autocomplete="off" [formGroup]="usersForm">
+                            <div class="form-row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="validationCustom02" class="mb-1">Nombres:</label>
+                                        <input class="form-control" type="text" formControlName="nombre">
+                                        <div *ngIf="usersForm.controls.nombre.touched && usersForm.controls.nombre.errors?.required" class="text text-danger">
+                                            el nombre es necesario es necesaria
+                                        </div>
+                                        <div *ngIf="usersForm.controls.nombre.touched && usersForm.controls.nombre.errors?.maxlength" class="text text-danger">
+                                            Máximo 50 caracteres
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="validationCustom02" class="mb-1">apellido:</label>
+                                        <input class="form-control" type="text" formControlName="apellido">
+                                        <div *ngIf="usersForm.controls.apellido.touched && usersForm.controls.apellido.errors?.required" class="text text-danger">
+                                            el apellido es necesario es necesaria
+                                        </div>
+                                        <div *ngIf="usersForm.controls.apellido.touched && usersForm.controls.apellido.errors?.maxlength" class="text text-danger">
+                                            Máximo 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="validationCustom02" class="mb-1">correo :</label>
+                                        <input class="form-control" type="text" formControlName="email">
+                                        <div *ngIf="usersForm.controls.email.touched && usersForm.controls.email.errors?.required" class="text text-danger">
+                                            correo electronico es requerido
+                                        </div>
+                                        <div *ngIf="usersForm.controls.email.touched && usersForm.controls.email.errors?.email" class="text text-danger">
+                                            Email inválido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="validationCustom02" class="mb-1">contrasenia xxxx:</label>
+                                        <input class="form-control" type="password" formControlName="password">
+                                        <div *ngIf="usersForm.controls.password.touched && usersForm.controls.password.errors?.required" class="text text-danger">
+                                            el contrasenia es necesario es necesaria
+                                        </div>
+                                        <div *ngIf="usersForm.controls.password.touched && usersForm.controls.password.errors?.maxlength" class="text text-danger">
+                                            Máximo 50 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-terms">
+                                <div class="custom-control custom-checkbox mr-sm-2">
+                                    <input type="checkbox" class="custom-control-input" id="customControlAutosizing1">
+                                    <label class="custom-control-label" for="customControlAutosizing1"><span>Estoy de acuerdo con todas las declaraciones
+                                            en <a href="javascript:void(0)" class="pull-right">  terminos  &amp; condiciones</a></span></label>
+                                </div>
+                            </div>
+                            <div class="form-button">
+                                <button class="btn btn-primary" type="button" (click)="createUser()">registrar</button>
+                            </div>
+                        </form>
+                    </ng-template>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')"><i class="fa fa-close"></i></button>
+    </div>
+</ng-template>
+<!-- header end -->
